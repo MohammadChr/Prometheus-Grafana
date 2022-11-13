@@ -1,2 +1,2 @@
 # Prometheus
-Prometheus-Grafana-Nginx
+Prometheus-Grafana-Nginx-NodeExporter
