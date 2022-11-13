@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    volumes:
+      - ${PWD}/nginx/conf.d:/etc/nginx/conf.d:rw
+      - ${PWD}/nginx:/var/www/html:rw
+    ports:
+      - 80:80
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ${PWD}/prometheus:/etc/prometheus:rw
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana 
+    volumes:
+      - ${PWD}/grafana:/var/lib/grafana:rw
+      - ${PWD}/grafana/config:/ect/grafana:rw
+    ports:
+      - 3000:3000
+  node-exporter:
+    image: prom/node-exporter
+    container_name: node-exporter
+    ports:
+      - 9100:9100
