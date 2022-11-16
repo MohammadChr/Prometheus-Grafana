@@ -1,0 +1,25 @@
+global:
+route:
+  group_by: ['notfication']
+  group_wait: 1m
+  group_interval: 1h
+  repeat_interval: 1h
+  receiver: 'send_email'
+receivers:
+- name: 'send_email'
+  email_configs:
+  - to: 'mohammadchr@gmail.com'
+    from: 'alert.chr@gmail.com'
+    smarthost: smtp.gmail.com:587
+    auth_username: 'alert.chr@gmail.com'
+    auth_identity: 'alert.chr@gmail.com'
+    auth_password: 'ztaoohhnmmiokmfk'
+    send_resolved: true
+#    require_tls: true
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['notfication', 'dev', 'instance']
+

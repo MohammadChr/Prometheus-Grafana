@@ -3,24 +3,28 @@ services:
   nginx:
     image: nginx:alpine
     container_name: nginx
+    privileged: true
     volumes:
-      - ${PWD}/nginx/conf.d:/etc/nginx/conf.d:rw
-      - ${PWD}/nginx:/var/www/html:rw
+      - ./nginx/conf.d:/etc/nginx/conf.d:rw
+      - ./nginx:/var/www/html:rw
     ports:
       - 80:80
   prometheus:
     image: prom/prometheus
+    container_name: prometheus
     ports:
       - 9090:9090
     volumes:
-      - ${PWD}/prometheus:/etc/prometheus:rw
-
+      - ./prom/conf/prometheus.yml:/etc/prometheus/prometheus.yml
+      - "./alertmanager/conf/rule.rules:/alertmanager/alert.rules"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
   grafana:
     image: grafana/grafana
     container_name: grafana 
     volumes:
-      - ${PWD}/grafana:/var/lib/grafana:rw
-      - ${PWD}/grafana/config:/ect/grafana:rw
+      - ./grafana:/var/lib/grafana:rw
+      - ./grafana/config:/ect/grafana:rw
     ports:
       - 3000:3000
   node-exporter:
@@ -28,3 +32,19 @@ services:
     container_name: node-exporter
     ports:
       - 9100:9100
+  alert-manager:
+    container_name: alertmanager
+    privileged: true
+    image: prom/alertmanager
+    ports:
+      - 9093:9093
+    volumes:
+      - "./alertmanager/conf/email.yml:/etc/alertmanager/email.yml"
+    command:
+      - '--config.file=/etc/alertmanager/email.yml'
+  snmp-exporter:
+    image: prom/snmp-exporter
+    container_name: snmp-exporter
+    ports:
+      - 9116:9116
+

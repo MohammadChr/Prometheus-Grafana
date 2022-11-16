@@ -1,0 +1,25 @@
+groups:
+- name: uptime
+  rules:
+  - alert: ServerIsDown
+    expr: up == 0
+    for: 10s
+    labels:
+      severity: warning
+    annotations:
+      summary: Server Is Downn
+
+- name: memfree
+  rules:
+  - alert: MemFreeIsLow
+    expr: node_memory_MemAvailable_bytes  / node_memory_MemTotal_bytes * 100 < 20
+    for: 10s
+    labels:
+      severity: warning
+    annotations:
+      summary: Mem Free Is Low
+
+
+
+
+

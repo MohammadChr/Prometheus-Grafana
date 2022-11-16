@@ -5,7 +5,6 @@ global:
   # external systems (federation, remote storage, Alertmanager).
   external_labels:
     monitor: 'codelab-monitor'
-
 # A scrape configuration containing exactly one endpoint to scrape:
 # Here it's Prometheus itself.
 scrape_configs:
@@ -19,4 +18,19 @@ scrape_configs:
       - targets: ['192.168.4.49:9090']
   - job_name: 'node_exporter'
     static_configs:
-      - targets: ['192.168.4.49:9100']    
+      - targets:
+        - 192.168.4.49:9100
+        - 192.168.4.49:80
+  - job_name: 'if_mib'
+    static_configs:
+    - targets:
+      - 192.168.4.49:9116
+      - 192.168.4.10:9436
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets: ['192.168.4.49:9093']
+
+rule_files:
+  - "/alertmanager/alert.rules"
+#  - "/alertmanager/alert1.rules"

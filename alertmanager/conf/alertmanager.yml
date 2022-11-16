@@ -1,0 +1,24 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 10s
+  receiver: 'email'
+receivers:
+- name: 'email'
+  email_configs:
+  - to: 'mohammadchr@gmail.com'
+    from: 'alert.chr@gmail.com'
+    smarthost: smtp.gmail.com:587
+    auth_username: 'alert.chr@gmail.com'
+    auth_identity: 'alert.chr@gmail.com'
+    auth_password: 'Alert@123456'
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'dev', 'instance']
